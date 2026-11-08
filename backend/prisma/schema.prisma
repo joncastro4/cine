@@ -1,0 +1,42 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Director {
+  idDirector Int        @id @default(autoincrement()) @map("IDDirector")
+  director   String     @db.VarChar(255) @map("Director")
+  peliculas  Pelicula[]
+
+  @@map("Directores")
+}
+
+model Categoria {
+  identificador Int        @id @default(autoincrement()) @map("Identificador")
+  categoria     String     @db.VarChar(100) @map("Categoria")
+  peliculas     Pelicula[]
+
+  @@map("Categorias")
+}
+
+model Pelicula {
+  identificador Int       @id @default(autoincrement()) @map("Identificador")
+  titulo        String    @db.VarChar(255) @map("Titulo")
+  idDirector    Int       @map("IDDirector")
+  duracion      Int       @map("Duracion") // Duración en minutos
+  idCategoria   Int       @map("IDCategoria")
+  sinopsis      String    @db.Text @map("Sinopsis")
+  imagenUrl     String?   @db.VarChar(500) @map("ImagenUrl") // URL de poster opcional para visualización en la app
+
+  director      Director  @relation(fields: [idDirector], references: [idDirector], onDelete: Cascade)
+  categoria     Categoria @relation(fields: [idCategoria], references: [identificador], onDelete: Cascade)
+
+  @@index([idDirector])
+  @@index([idCategoria])
+  @@map("Peliculas")
+}
+
