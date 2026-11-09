@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../colors';
-import { getPelicula } from '../services/api';
+import { eliminarPelicula, getPelicula } from '../services/api';
 import { Pelicula } from '../types';
 
 type Props = {
   id: number;
   onBack: () => void;
+  onEdit: (id: number) => void;
 };
 
-export function DetalleScreen({ id, onBack }: Props) {
+export function DetalleScreen({ id, onBack, onEdit }: Props) {
   const [pelicula, setPelicula] = useState<Pelicula | null>(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
+  const [confirmando, setConfirmando] = useState(false);
 
   useEffect(() => {
     let activo = true;
@@ -36,6 +38,18 @@ export function DetalleScreen({ id, onBack }: Props) {
     };
   }, [id]);
 
+  async function borrar() {
+    if (!pelicula) return;
+
+    try {
+      await eliminarPelicula(pelicula.Identificador);
+      onBack();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo eliminar');
+      setConfirmando(false);
+    }
+  }
+
   return (
     <View style={styles.contenedor}>
       <Pressable onPress={onBack} style={styles.volver}>
@@ -58,6 +72,27 @@ export function DetalleScreen({ id, onBack }: Props) {
 
           <Text style={styles.sinopsisTitulo}>Sinopsis</Text>
           <Text style={styles.sinopsis}>{pelicula.Sinopsis}</Text>
+
+          <View style={styles.acciones}>
+            <Pressable onPress={() => onEdit(pelicula.Identificador)}>
+              <Text style={styles.editar}>Editar</Text>
+            </Pressable>
+            {confirmando ? (
+              <View style={styles.confirmarFila}>
+                <Text style={styles.confirmar}>¿Seguro?</Text>
+                <Pressable onPress={borrar}>
+                  <Text style={styles.eliminar}>Sí, eliminar</Text>
+                </Pressable>
+                <Pressable onPress={() => setConfirmando(false)}>
+                  <Text style={styles.editar}>No</Text>
+                </Pressable>
+              </View>
+            ) : (
+              <Pressable onPress={() => setConfirmando(true)}>
+                <Text style={styles.eliminar}>Eliminar</Text>
+              </Pressable>
+            )}
+          </View>
         </ScrollView>
       )}
     </View>
@@ -130,6 +165,30 @@ const styles = StyleSheet.create({
     color: '#ddd6c8',
     fontSize: 16,
     lineHeight: 24,
+  },
+  acciones: {
+    flexDirection: 'row',
+    gap: 22,
+    marginTop: 22,
+  },
+  editar: {
+    color: colors.acento,
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  eliminar: {
+    color: '#d7a097',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  confirmar: {
+    color: colors.suave,
+    fontSize: 16,
+  },
+  confirmarFila: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
   },
   error: {
     color: colors.suave,

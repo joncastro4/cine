@@ -8,3 +8,21 @@ export type Pelicula = {
   Categoria: string;
   Sinopsis: string;
 };
+
+export type Director = {
+  IDDirector: number;
+  Director: string;
+};
+
+export type Categoria = {
+  Identificador: number;
+  Categoria: string;
+};
+
+export type PeliculaInput = {
+  Titulo: string;
+  IDDirector: number;
+  Duracion: number;
+  IDCategoria: number;
+  Sinopsis: string;
+};

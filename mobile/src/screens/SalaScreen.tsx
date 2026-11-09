@@ -13,9 +13,10 @@ import { Pelicula } from '../types';
 
 type Props = {
   onOpenDetail: (id: number) => void;
+  onAgregar: () => void;
 };
 
-export function SalaScreen({ onOpenDetail }: Props) {
+export function SalaScreen({ onOpenDetail, onAgregar }: Props) {
   const [peliculas, setPeliculas] = useState<Pelicula[]>([]);
   const [enPantalla, setEnPantalla] = useState<Pelicula | null>(null);
   const [cargando, setCargando] = useState(true);
@@ -44,8 +45,15 @@ export function SalaScreen({ onOpenDetail }: Props) {
 
   return (
     <View style={styles.contenedor}>
-      <Text style={styles.titulo}>Cinetopia</Text>
-      <Text style={styles.sala}>Sala 1</Text>
+      <View style={styles.encabezado}>
+        <View>
+          <Text style={styles.titulo}>Cinetopia</Text>
+          <Text style={styles.sala}>Sala 1</Text>
+        </View>
+        <Pressable onPress={onAgregar}>
+          <Text style={styles.agregar}>Agregar</Text>
+        </Pressable>
+      </View>
 
       <View style={styles.pantalla}>
         <Text style={styles.etiqueta}>Pantalla</Text>
@@ -127,6 +135,12 @@ const styles = StyleSheet.create({
     maxWidth: 480,
     alignSelf: 'center',
   },
+  encabezado: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginBottom: 14,
+  },
   titulo: {
     color: colors.texto,
     fontSize: 28,
@@ -134,7 +148,12 @@ const styles = StyleSheet.create({
   },
   sala: {
     color: colors.suave,
-    marginBottom: 14,
+  },
+  agregar: {
+    color: colors.acento,
+    fontWeight: '700',
+    paddingVertical: 6,
+    paddingLeft: 12,
   },
   pantalla: {
     backgroundColor: colors.pantalla,

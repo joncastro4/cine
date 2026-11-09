@@ -6,6 +6,7 @@ App de cine para consultar películas. La base está en MySQL, el backend es una
 
 - La sala muestra todas las películas. Al tocar una, su título pasa a la pantalla.
 - El detalle enseña título, director, duración, categoría y sinopsis.
+- Desde Agregar se da de alta una película. En el detalle se puede editar o eliminar. Si falta un director o una categoría, se agregan ahí mismo.
 
 ## Cómo correrlo
 

@@ -8,6 +8,8 @@ Tablas: `Peliculas`, `Directores`, `Categorias`.
 
 - `GET /api/peliculas` lista todas, con el nombre del director y de la categoría.
 - `GET /api/peliculas/:id` regresa una. Si el id no existe, responde 404.
+- `POST /api/peliculas` crea una. `PUT /api/peliculas/:id` la edita. `DELETE /api/peliculas/:id` la borra.
+- `GET` y `POST` en `/api/directores` y `/api/categorias` sirven para elegirlos o registrar uno nuevo.
 
 ## Arranque
 

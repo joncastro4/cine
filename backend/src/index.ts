@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import categoriasRoutes from './routes/categorias.routes';
+import directoresRoutes from './routes/directores.routes';
 import peliculasRoutes from './routes/peliculas.routes';
 
 dotenv.config();
@@ -15,10 +17,14 @@ app.get('/', (_req, res) => {
   res.json({
     mensaje: 'API de Cinetopia',
     peliculas: '/api/peliculas',
+    directores: '/api/directores',
+    categorias: '/api/categorias',
   });
 });
 
 app.use('/api/peliculas', peliculasRoutes);
+app.use('/api/directores', directoresRoutes);
+app.use('/api/categorias', categoriasRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ mensaje: 'Ruta no encontrada' });
